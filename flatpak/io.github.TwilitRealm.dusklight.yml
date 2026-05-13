@@ -1,0 +1,62 @@
+app-id: io.github.TwilitRealm.dusklight
+runtime: org.freedesktop.Platform
+runtime-version: '24.08'
+sdk: org.freedesktop.Sdk
+sdk-extensions:
+  - org.freedesktop.Sdk.Extension.llvm18
+command: dusklight
+
+finish-args:
+  - --share=ipc
+  - --socket=wayland
+  - --socket=fallback-x11
+  - --device=dri
+  - --device=input
+  - --socket=pulseaudio
+  - --filesystem=xdg-run/discord-ipc-0
+  - --share=network 
+
+build-options:
+  append-path: /usr/lib/sdk/llvm18/bin
+  prepend-ld-library-path: /usr/lib/sdk/llvm18/lib
+  env:
+    CC: clang
+    CXX: clang++
+    LD: lld
+
+modules:
+  - name: dusklight
+    buildsystem: simple
+    build-options:
+      build-args:
+        - --share=network 
+    build-commands:
+            
+      - git submodule update --init --recursive
+      
+      - cmake --preset linux-default-relwithdebinfo
+      - cmake --build --preset linux-default-relwithdebinfo -j $FLATPAK_BUILDER_N_JOBS
+      
+      - mkdir -p /app/opt/dusklight /app/bin /app/share/applications /app/share/metainfo /app/share/icons/hicolor/32x32/apps /app/share/icons/hicolor/48x48/apps /app/share/icons/hicolor/64x64/apps /app/share/icons/hicolor/256x256/apps /app/share/icons/hicolor/512x512/apps
+      
+      - cp -r build/linux-default-relwithdebinfo/* /app/opt/dusklight/
+      - chmod +x /app/opt/dusklight/dusklight
+      - ln -s /app/opt/dusklight/dusklight /app/bin/dusklight
+      
+      - install -Dm644 platforms/freedesktop/dusklight.desktop /app/share/applications/io.github.TwilitRealm.dusklight.desktop
+      - sed -i 's/^Icon=.*/Icon=io.github.TwilitRealm.dusklight/' /app/share/applications/io.github.TwilitRealm.dusklight.desktop
+      
+      - install -Dm644 platforms/freedesktop/512x512/apps/dusklight.png /app/share/icons/hicolor/512x512/apps/io.github.TwilitRealm.dusklight.png
+      - install -Dm644 platforms/freedesktop/256x256/apps/dusklight.png /app/share/icons/hicolor/256x256/apps/io.github.TwilitRealm.dusklight.png
+      - install -Dm644 platforms/freedesktop/32x32/apps/dusklight.png /app/share/icons/hicolor/32x32/apps/io.github.TwilitRealm.dusklight.png
+      - install -Dm644 platforms/freedesktop/48x48/apps/dusklight.png /app/share/icons/hicolor/48x48/apps/io.github.TwilitRealm.dusklight.png
+      - install -Dm644 platforms/freedesktop/64x64/apps/dusklight.png /app/share/icons/hicolor/64x64/apps/io.github.TwilitRealm.dusklight.png
+      
+     # - install -Dm644 io.github.TwilitRealm.dusklight.metainfo.xml /app/share/metainfo/io.github.TwilitRealm.dusklight.metainfo.xml #Left over from the Flathub build. Uncomment it, if you want to compile with a metainfo.xml
+
+    sources:
+      - type: git
+        url: https://github.com/TwilitRealm/dusklight.git
+        branch: main
+     # - type: file                                                                            #      path for the metinfo.xml
+       # path: io.github.TwilitRealm.dusklight.metainfo.xml

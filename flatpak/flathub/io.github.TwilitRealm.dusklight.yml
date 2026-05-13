@@ -1,0 +1,100 @@
+app-id: io.github.TwilitRealm.dusklight
+runtime: org.freedesktop.Platform
+runtime-version: '24.08'
+sdk: org.freedesktop.Sdk
+sdk-extensions:
+  - org.freedesktop.Sdk.Extension.llvm18
+  - org.freedesktop.Sdk.Extension.rust-stable
+command: dusklight
+
+finish-args:
+  - --share=ipc
+  - --socket=wayland
+  - --socket=fallback-x11
+  - --device=dri
+  - --device=input
+  - --socket=pulseaudio
+  - --filesystem=xdg-run/discord-ipc-0
+  - --share=network 
+
+build-options:
+  no-debuginfo: true
+  append-path: /usr/lib/sdk/llvm18/bin:/usr/lib/sdk/rust-stable/bin
+  prepend-ld-library-path: /usr/lib/sdk/llvm18/lib
+  env:
+    CC: clang
+    CXX: clang++
+    LD: lld
+
+modules:
+  - name: libjpeg-turbo
+    buildsystem: cmake-ninja
+    config-opts:
+      - -DENABLE_SHARED=OFF
+      - -DWITH_TURBOJPEG=ON
+      - -DWITH_JAVA=OFF
+    sources:
+      - type: archive
+        url: https://github.com/libjpeg-turbo/libjpeg-turbo/archive/refs/tags/3.1.0.tar.gz
+        sha256: 35fec2e1ddfb05ecf6d93e50bc57c1e54bc81c16d611ddf6eff73fff266d8285
+
+  - name: nod
+    buildsystem: cmake-ninja
+    config-opts:
+      - -DFETCHCONTENT_FULLY_DISCONNECTED=ON
+      - -DFETCHCONTENT_SOURCE_DIR_CORROSION=deps/corrosion
+    build-options:
+      env:
+        CARGO_HOME: /run/build/nod/cargo
+    sources:
+      - type: archive
+        url: https://github.com/encounter/nod/archive/refs/tags/v2.0.0-alpha.8.tar.gz
+        sha256: c266e80b53e7d9c64737a1ce45ca9782cae115838348e3a8be0e26e61ccc7210
+      - nod-sources.json
+      - type: archive
+        url: https://github.com/corrosion-rs/corrosion/archive/refs/tags/v0.5.0.tar.gz
+        sha256: bbe0d4a31cef91b890134af82789fb6e8ecc33270472beea9cecb8f2b7b7ed65
+        dest: deps/corrosion
+
+  - name: dusklight
+    buildsystem: simple
+    build-commands:
+         
+      - >
+        cmake . --preset linux-default-relwithdebinfo
+        -DBUILD_SHARED_LIBS=OFF
+        -DFETCHCONTENT_FULLY_DISCONNECTED=ON
+        -DFETCHCONTENT_SOURCE_DIR_CXXOPTS=deps/cxxopts
+        -DFETCHCONTENT_SOURCE_DIR_JSON=deps/json
+        -DFETCHCONTENT_SOURCE_DIR_DAWN_PREBUILT=deps/dawn
+        -DFETCHCONTENT_SOURCE_DIR_SDL=deps/sdl
+        -DAURORA_NOD_PROVIDER=system
+        -DFETCHCONTENT_SOURCE_DIR_XXHASH=deps/xxhash
+        -DFETCHCONTENT_SOURCE_DIR_FMT=deps/fmt
+        -DFETCHCONTENT_SOURCE_DIR_FREETYPE=deps/freetype
+        -DFETCHCONTENT_SOURCE_DIR_IMGUI=deps/imgui
+        -DFETCHCONTENT_SOURCE_DIR_SQLITE3=deps/sqlite3
+        -DFETCHCONTENT_SOURCE_DIR_ZSTD=deps/zstd
+        -DFETCHCONTENT_SOURCE_DIR_RMLUI=deps/rmlui
+        -DFETCHCONTENT_SOURCE_DIR_TRACY=deps/tracy
+      
+      - cmake --build . --preset linux-default-relwithdebinfo -j $FLATPAK_BUILDER_N_JOBS
+      
+      - mkdir -p /app/opt/dusklight /app/bin /app/share/applications /app/share/metainfo /app/share/icons/hicolor/32x32/apps /app/share/icons/hicolor/48x48/apps /app/share/icons/hicolor/64x64/apps /app/share/icons/hicolor/256x256/apps /app/share/icons/hicolor/512x512/apps
+      - cp -r build/linux-default-relwithdebinfo/* /app/opt/dusklight/
+      - chmod +x /app/opt/dusklight/dusklight
+      - ln -sf /app/opt/dusklight/dusklight /app/bin/dusklight
+      
+      - install -Dm644 platforms/freedesktop/dusklight.desktop /app/share/applications/io.github.TwilitRealm.dusklight.desktop
+      - sed -i 's/^Icon=.*/Icon=io.github.TwilitRealm.dusklight/' /app/share/applications/io.github.TwilitRealm.dusklight.desktop
+      
+      - install -Dm644 platforms/freedesktop/512x512/apps/dusklight.png /app/share/icons/hicolor/512x512/apps/io.github.TwilitRealm.dusklight.png
+      - install -Dm644 platforms/freedesktop/256x256/apps/dusklight.png /app/share/icons/hicolor/256x256/apps/io.github.TwilitRealm.dusklight.png
+      - install -Dm644 platforms/freedesktop/32x32/apps/dusklight.png /app/share/icons/hicolor/32x32/apps/io.github.TwilitRealm.dusklight.png
+      - install -Dm644 platforms/freedesktop/48x48/apps/dusklight.png /app/share/icons/hicolor/48x48/apps/io.github.TwilitRealm.dusklight.png
+      - install -Dm644 platforms/freedesktop/64x64/apps/dusklight.png /app/share/icons/hicolor/64x64/apps/io.github.TwilitRealm.dusklight.png
+      - install -Dm644 io.github.TwilitRealm.dusklight.metainfo.xml /app/share/metainfo/io.github.TwilitRealm.dusklight.metainfo.xml
+    sources:
+      - dusklight-sources.json
+      - type: file
+        path: io.github.TwilitRealm.dusklight.metainfo.xml

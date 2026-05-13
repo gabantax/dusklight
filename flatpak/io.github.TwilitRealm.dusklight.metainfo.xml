@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>io.github.TwilitRealm.dusklight</id>
+  <name>Dusklight</name>
+  <developer id="com.github.TwilitRealm">
+    <name>TwilitRealm Team</name>
+  </developer>
+  <summary>Twilight Princess reimplementation</summary>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>CC0-1.0</project_license>
+  <content_rating type="oars-1.0"/>
+  <description>
+    <p>
+      dusklight is a reverse-engineered reimplementation of Twilight Princess.
+      It aims to be as accurate as possible to the original while also providing new options, enhancements, and tools to customize your experience.
+    </p>
+  </description>
+  
+  <launchable type="desktop-id">io.github.TwilitRealm.dusklight.desktop</launchable>
+  
+  <provides>
+    <binary>dusklight</binary>
+    <id>io.github.TwilitRealm.dusklight.desktop</id>
+  </provides>
+  
+  <releases>
+    <release version="1.0.1" date="2026-05-11">
+      <description>
+        <p>Dusklight is a reverse-engineered reimplementation of Twilight Princess.</p>
+      </description>
+    </release>
+  </releases>
+  
+  <url type="homepage">https://github.com/TwilitRealm/dusklight</url>
+  <url type="bugtracker">https://github.com/TwilitRealm/dusklight/issues</url>
+</component>
