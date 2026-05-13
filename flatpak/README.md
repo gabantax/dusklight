@@ -25,7 +25,8 @@ The Flathub version also has nod- and dusklight-sources.json files where the sou
 
 ## "special" Permissions used
 * `--device=dri` for graphics acceleration
-* `--device=input` for Controller to work. => device=all not needed since EOS 1.14!
+* `--device=input` for Controller to work. => device=all not needed since EOS 1.14! But Gyro doesnt work
+* `--device=all` Controller work without any problem but the flatpak has access to the devices
 * `--filesystem=xdg-run/discord-ipc-0` for the Discord integration => in working order!
 * `--share=network` for the Update Check to run otherwise "failed to check for update" would be displayed at the start
 
@@ -39,7 +40,7 @@ Download the manifest of your choice into a folder (the Flathub folder is needed
 If you just want to compile and directly install it without generating a `.flatpak` file, run:
 
 ```bash
-flatpak-builder --user --install --force-clean build-dir io.github.TwilitRealm.dusklight.yml
+flatpak-builder --user --install --force-clean build-dir dev.twilitrealm.dusklight.yml
 ```
 
 ### Exporting a .flatpak Bundle
@@ -47,14 +48,14 @@ flatpak-builder --user --install --force-clean build-dir io.github.TwilitRealm.d
 If you want to create a `.flatpak` file for export:
 
 ```bash
-flatpak-builder --repo=EXPORT --force-clean build-dir io.github.TwilitRealm.dusklight.yml
+flatpak-builder --repo=EXPORT --force-clean build-dir dev.twilitrealm.dusklight.yml
 ```
 *Note: This writes into a temporary local repo named "EXPORT". You can change this name if you wish, but make sure to also change it in the next command.*
 
 Then, build the bundle:
 
 ```bash
-flatpak build-bundle EXPORT dusklight.flatpak io.github.TwilitRealm.dusklight
+flatpak build-bundle EXPORT dusklight.flatpak dev.twilitrealm.dusklight
 ```
 After this step, the `dusklight.flatpak` file will be generated in your current folder.
 
