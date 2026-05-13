@@ -2,7 +2,8 @@
     {
         "type": "git",
         "url": "https://github.com/TwilitRealm/dusklight.git",
-        "tag": "main"
+        "tag": "v1.1.1",
+        "commit": "7a77d48954847330a5ab55f5c7f2e64cdd25d846"
     },
     {
         "type": "archive",

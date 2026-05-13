@@ -57,6 +57,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/TwilitRealm/dusklight.git
-        branch: main
+        tag: v1.1.1
+        commit: 7a77d48954847330a5ab55f5c7f2e64cdd25d846
      # - type: file                                                                            #      path for the metinfo.xml
        # path: io.github.TwilitRealm.dusklight.metainfo.xml

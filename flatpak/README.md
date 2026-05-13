@@ -30,7 +30,7 @@ The Flathub version also has nod- and dusklight-sources.json files where the sou
 * `--share=network` for the Update Check to run otherwise "failed to check for update" would be displayed at the start
 
 ## How build it yourself
-*Note currently it compiles the *GIT*-Version! If a release >1.0.1 is releaded you have to put into the release tag inside the .yml! (on the Flathub version put it into the dusklight-sources.yml at the top!)
+*Dont forget to change the version! Currently it compile v1.1.1!
 
 Download the manifest of your choice into a folder (the Flathub folder is needed if you use the work-in-progress Flathub build).
 
