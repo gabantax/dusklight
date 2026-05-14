@@ -16,8 +16,7 @@ finish-args:
   - --device=all
   - --socket=pulseaudio
   - --filesystem=xdg-run/discord-ipc-0
-  - --share=network 
-  - --filesystem=home:ro
+  - --share=network
 
 build-options:
   no-debuginfo: true
@@ -99,4 +98,4 @@ modules:
     sources:
       - dusklight-sources.json
       - type: file
-        path: dev.twilitrealm.dusklight.metainfo.xml
+        path: ../dev.twilitrealm.dusklight.metainfo.xml

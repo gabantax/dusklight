@@ -15,8 +15,7 @@ finish-args:
   - --device=all
   - --socket=pulseaudio
   - --filesystem=xdg-run/discord-ipc-0
-  - --share=network 
-  - --filesystem=home:ro
+  - --share=network
 
 build-options:
   no-debuginfo: true
@@ -55,12 +54,13 @@ modules:
       - install -Dm644 platforms/freedesktop/48x48/apps/dusklight.png /app/share/icons/hicolor/48x48/apps/dev.twilitrealm.dusklight.png
       - install -Dm644 platforms/freedesktop/64x64/apps/dusklight.png /app/share/icons/hicolor/64x64/apps/dev.twilitrealm.dusklight.png
       
-     # - install -Dm644 dev.twilitrealm.dusklight.metainfo.xml /app/share/metainfo/dev.twilitrealm.dusklight.metainfo.xml #Left over from the Flathub build. Uncomment it, if you want to compile with a metainfo.xml
+      - install -Dm644 dev.twilitrealm.dusklight.metainfo.xml /app/share/metainfo/dev.twilitrealm.dusklight.metainfo.xml
 
     sources:
       - type: git
         url: https://github.com/TwilitRealm/dusklight.git
         tag: v1.1.1
         commit: 7a77d48954847330a5ab55f5c7f2e64cdd25d846
-     # - type: file                                                                            #      path for the metinfo.xml
-       # path: dev.twilitrealm.dusklight.metainfo.xml
+      - type: file
+        path: dev.twilitrealm.dusklight.metainfo.xml
+ 
