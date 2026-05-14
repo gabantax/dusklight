@@ -273,31 +273,41 @@ jobs:
             build/install/res/
             build/install/debug.7z
 
-  build-flatpak:
-    name: "Flatpak"
-    runs-on: ubuntu-latest
+build-flatpak:
+    name: Build Flatpak (${{matrix.name}})
+    runs-on: ${{matrix.runner}}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: x86_64
+            runner: ubuntu-latest
+            artifact_arch: x86_64
+
     container:
       image: ghcr.io/flathub-infra/flatpak-github-actions:freedesktop-24.08
       options: --privileged
+
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
+          fetch-depth: 0
           submodules: recursive
 
       - name: Patch Manifest to current git state
         run: |
+          sed -i "/tag: .*/d" flatpak/dev.twilitrealm.dusklight.yml
           sed -i "s/commit: .*/commit: ${{ github.sha }}/" flatpak/dev.twilitrealm.dusklight.yml
-          sed -i "s/tag: .*/tag: ci-test/" flatpak/dev.twilitrealm.dusklight.yml
 
-      - name: Build Flatpak
+      - name: Build
         uses: flatpak/flatpak-github-actions/flatpak-builder@v6
         with:
           bundle: dusklight.flatpak
           manifest-path: flatpak/dev.twilitrealm.dusklight.yml
-          cache-key: flatpak-builder-${{ github.sha }}
+          cache-key: flatpak-builder-${{ github.sha }}-${{ matrix.artifact_arch }}
 
-      - name: Upload Artifact
+      - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
           name: dusklight-flatpak
