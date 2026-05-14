@@ -272,8 +272,7 @@ jobs:
             build/install/*.dll
             build/install/res/
             build/install/debug.7z
-
-build-flatpak:
+build-flatpak:  
     name: Build Flatpak (${{matrix.name}})
     runs-on: ${{matrix.runner}}
 
