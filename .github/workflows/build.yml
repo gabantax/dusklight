@@ -295,10 +295,10 @@ jobs:
             fetch-depth: 0
             submodules: recursive
 
-        - name: Patch Manifest to current git state
+        - name: Patch Manifest to current git state #otherwise the flatpak wont be able to build it properly -> verion check and update check not working if you compile it localy
           run: |
-            sed -i "/tag: .*/d" flatpak/dev.twilitrealm.dusklight.yml
-            sed -i "s/commit: .*/commit: ${{ github.sha }}/" flatpak/dev.twilitrealm.dusklight.yml
+            sed -i "s/tag: .*/branch: main/" flatpak/dev.twilitrealm.dusklight.yml
+            sed -i "/commit: .*/d" flatpak/dev.twilitrealm.dusklight.yml
 
         - name: Build
           uses: flatpak/flatpak-github-actions/flatpak-builder@v6
