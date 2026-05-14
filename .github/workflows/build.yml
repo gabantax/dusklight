@@ -310,5 +310,5 @@ jobs:
         - name: Upload artifacts
           uses: actions/upload-artifact@v4
           with:
-            name: dusklight-flatpak
-            path: dusklight.flatpak
+            name: build/install/dusklight-flatpak
+            path: build/install/dusklight.flatpak
