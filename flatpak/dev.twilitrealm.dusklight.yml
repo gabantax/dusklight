@@ -34,8 +34,6 @@ modules:
         - --share=network 
     build-commands:
             
-      - git submodule update --init --recursive
-      
       - cmake --preset linux-default-relwithdebinfo
       - cmake --build --preset linux-default-relwithdebinfo -j $FLATPAK_BUILDER_N_JOBS
       
